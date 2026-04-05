@@ -17,8 +17,8 @@ def _find_ffmpeg_dir() -> Optional[str]:
     # Check common locations for ffmpeg
     common_paths = [
         # Windows
-        r"C:\projects\downloader\ffmpeg\bin",
-        r"C:\projects\downloader\ffmpeg\bin",
+        r"C:\projects\Universal_downloader\ffmpeg\bin",
+        r"C:\projects\Universal_downloader\ffmpeg\bin",
         # macOS
         "/usr/local/bin",
         "/opt/homebrew/bin",
