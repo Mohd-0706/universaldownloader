@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <meta name="description" content="VidGet — Free video and audio downloader for YouTube, Instagram Reels, and Facebook. No sign-up needed."/>
+  <meta name="keywords" content="video downloader,youtube downloader,instagram reels downloader,facebook video downloader,mp3 converter,youtube shorts downloader"/>
+  <meta name="robots" content="index,follow"/>
+  <meta property="og:title" content="VidGet — Free Video Downloader"/>
+  <meta property="og:description" content="Download YouTube, Instagram & Facebook videos in HD. Free, instant, no account."/>
+  <meta property="og:type" content="website"/>
+  <title>VidGet — Free Video & Audio Downloader</title>
+  
+  <!-- Cloudflare CDN & Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet"/>
+
+  <style>
+/* ═══════════════════════════════════════════════════
+   RESET
+═══════════════════════════════════════════════════ */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+
+/* ═══════════════════════════════════════════════════
+   DESIGN TOKENS
+═══════════════════════════════════════════════════ */
+:root{
+  --bg:          #f5f7fa;
+  --surface:     #ffffff;
+  --surface-2:   #f0f3f8;
+  --surface-3:   #e8ecf4;
+  --brand:       #2563eb;
+  --brand-dk:    #1d4ed8;
+  --brand-lt:    #3b82f6;
+  --brand-ghost: rgba(37,99,235,.08);
+  --brand-ring:  rgba(37,99,235,.22);
+  --text:        #0f172a;
+  --text-2:      #374151;
+  --text-3:      #6b7280;
+  --text-4:      #9ca3af;
+  --border:      #e2e8f0;
+  --border-2:    #cbd5e1;
+  --success:     #16a34a;
+  --success-bg:  #f0fdf4;
+  --success-bd:  #bbf7d0;
+  --danger:      #dc2626;
+  --danger-bg:   #fef2f2;
+  --danger-bd:   #fecaca;
+  --warn:        #d97706;
+  --warn-bg:     #fffbeb;
+  --warn-bd:     #fde68a;
+  --r:    12px;
+  --r-sm: 8px;
+  --r-xs: 6px;
+  --r-lg: 16px;
+  --shadow-xs: 0 1px 2px rgba(15,23,42,.06);
+  --shadow-sm: 0 1px 3px rgba(15,23,42,.10),0 1px 2px rgba(15,23,42,.06);
+  --shadow:    0 4px 6px -1px rgba(15,23,42,.08),0 2px 4px -2px rgba(15,23,42,.06);
+  --shadow-md: 0 10px 15px -3px rgba(15,23,42,.08),0 4px 6px -4px rgba(15,23,42,.06);
+  --shadow-lg: 0 20px 25px -5px rgba(15,23,42,.10),0 8px 10px -6px rgba(15,23,42,.06);
+  --font:      'Outfit', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+}
+
+body{
+  font-family:var(--font);
+  background:var(--bg);
+  color:var(--text);
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+  line-height:1.6;
+  font-size:15px;
+}
+img{display:block;max-width:100%}
+button{font-family:var(--font);cursor:pointer}
+a{color:var(--brand);text-decoration:none}
+a:hover{text-decoration:underline}
+.hidden{display:none!important}
+
+/* Header */
+header{
+  background:var(--surface);
+  border-bottom:1px solid var(--border);
+  position:sticky;top:0;z-index:200;
+  box-shadow:var(--shadow-xs);
+}
+.header-inner{
+  max-width:1100px;margin:0 auto;
+  display:flex;align-items:center;justify-content:space-between;
+  height:60px;padding:0 24px;
+}
+.logo{display:flex;align-items:center;gap:9px;text-decoration:none}
+.logo-mark{
+  width:34px;height:34px;
+  background:var(--brand);
+  border-radius:9px;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 2px 8px var(--brand-ring);
+  flex-shrink:0;
+}
+.logo-mark .material-icons{font-size:18px;color:#fff}
+.logo-name{
+  font-size:1.2rem;font-weight:800;
+  color:var(--text);letter-spacing:-.5px;
+}
+.logo-name span{color:var(--brand)}
+
+/* Hero */
+.hero{
+  text-align:center;
+  padding:60px 20px 44px;
+  max-width:700px;
+  margin:0 auto;
+}
+.hero-eyebrow{
+  display:inline-flex;align-items:center;gap:8px;
+  background:var(--brand-ghost);
+  border:1px solid var(--brand-ring);
+  border-radius:50px;
+  padding:5px 16px;
+  font-size:.78rem;font-weight:600;
+  color:var(--brand);letter-spacing:.04em;
+  text-transform:uppercase;
+  margin-bottom:20px;
+}
+.hero h1{
+  font-size:clamp(2rem,5vw,3rem);
+  font-weight:800;
+  line-height:1.15;
+  letter-spacing:-.8px;
+  color:var(--text);
+  margin-bottom:16px;
+}
+.hero h1 strong{color:var(--brand)}
+.hero p{
+  font-size:1.05rem;color:var(--text-3);
+  max-width:460px;margin:0 auto 28px;
+}
+.platform-row{
+  display:flex;justify-content:center;
+  gap:8px;flex-wrap:wrap;
+}
+.p-chip{
+  display:inline-flex;align-items:center;gap:6px;
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:50px;
+  padding:5px 13px;
+  font-size:.76rem;font-weight:600;color:var(--text-2);
+  box-shadow:var(--shadow-xs);
+}
+.p-dot{width:7px;height:7px;border-radius:50%}
+
+/* Main */
+main{flex:1;padding:0 16px 64px}
+.content-wrap{max-width:780px;margin:0 auto}
+.card{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:var(--r-lg);
+  box-shadow:var(--shadow-md);
+  overflow:hidden;
+}
+
+/* URL input */
+.url-block{padding:28px 28px 24px}
+.field-label{
+  display:block;
+  font-size:.72rem;font-weight:700;
+  text-transform:uppercase;letter-spacing:.1em;
+  color:var(--text-4);margin-bottom:10px;
+}
+.url-row{display:flex;gap:10px}
+#url-input{
+  flex:1;
+  background:var(--surface-2);
+  border:1.5px solid var(--border);
+  border-radius:var(--r-sm);
+  font-family:var(--font);font-size:.97rem;
+  color:var(--text);
+  padding:12px 16px;
+  outline:none;
+  transition:border-color .18s,box-shadow .18s,background .18s;
+}
+#url-input:focus{
+  border-color:var(--brand);
+  background:var(--surface);
+  box-shadow:0 0 0 3px var(--brand-ring);
+}
+#fetch-btn{
+  flex-shrink:0;
+  background:var(--brand);
+  color:#fff;border:none;
+  border-radius:var(--r-sm);
+  font-size:.92rem;font-weight:700;
+  padding:12px 22px;
+  display:flex;align-items:center;gap:8px;
+  transition:background .18s,box-shadow .18s,transform .1s;
+}
+#fetch-btn:hover{background:var(--brand-dk);box-shadow:0 4px 14px rgba(37,99,235,.35)}
+#fetch-btn:disabled{background:var(--text-4);cursor:not-allowed}
+
+.btn-spin{
+  width:15px;height:15px;
+  border:2px solid rgba(255,255,255,.35);
+  border-top-color:#fff;
+  border-radius:50%;
+  animation:spin .65s linear infinite;
+  display:none;
+}
+#fetch-btn.loading .btn-spin{display:block}
+#fetch-btn.loading .btn-label{display:none}
+
+/* Alerts */
+.alert{
+  margin:16px 28px 0;
+  border-radius:var(--r-sm);
+  padding:12px 15px;
+  font-size:.875rem;
+  display:flex;align-items:flex-start;gap:10px;
+}
+.alert-error{
+  background:var(--danger-bg);
+  border:1px solid var(--danger-bd);
+  color:var(--danger);
+}
+.alert-warn{
+  background:var(--warn-bg);
+  border:1px solid var(--warn-bd);
+  color:var(--warn);
+}
+.alert-success{
+  background:var(--success-bg);
+  border:1px solid var(--success-bd);
+  color:var(--success);
+}
+
+/* Quality Badge */
+.quality-badge{
+  background:var(--brand-ghost);
+  color:var(--brand);
+  padding:4px 12px;
+  border-radius:20px;
+  font-size:.75rem;
+  font-weight:600;
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+}
+
+/* Progress Bar */
+#progress-box{
+  margin:16px 28px 0;
+  background:var(--surface-2);
+  border:1px solid var(--border);
+  border-radius:var(--r-sm);
+  padding:16px 18px;
+}
+.prog-track{
+  height:7px;background:var(--surface-3);
+  border-radius:50px;overflow:hidden;
+}
+#prog-fill{
+  height:100%;background:var(--brand);
+  border-radius:50px;width:0%;
+  transition:width .38s cubic-bezier(.4,0,.2,1);
+}
+
+/* Result Panel */
+#result-panel{padding:24px 28px 28px}
+.video-meta{
+  display:flex;gap:18px;align-items:flex-start;
+  margin-bottom:26px;
+}
+.thumb-frame{
+  flex-shrink:0;width:168px;height:104px;
+  border-radius:var(--r-sm);overflow:hidden;
+  background:var(--surface-2);
+  border:1px solid var(--border);
+}
+.thumb-frame img{width:100%;height:100%;object-fit:cover}
+.video-info{flex:1}
+.video-title{
+  font-size:1rem;font-weight:700;
+  margin-bottom:8px;
+  line-height:1.4;
+}
+.meta-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.meta-tag{
+  display:inline-flex;align-items:center;gap:5px;
+  background:var(--surface-2);
+  border:1px solid var(--border);
+  border-radius:50px;
+  padding:3px 11px;
+  font-size:.74rem;
+  color:var(--text-3);
+}
+
+/* Download Sections */
+.dl-group{margin-bottom:22px}
+.dl-head{
+  display:flex;align-items:center;gap:10px;
+  font-size:.72rem;font-weight:700;
+  text-transform:uppercase;
+  color:var(--text-4);
+  margin-bottom:12px;
+}
+.btn-grid{display:flex;flex-wrap:wrap;gap:8px}
+.dl-btn{
+  display:flex;align-items:center;gap:7px;
+  background:var(--surface);
+  border:1.5px solid var(--border);
+  border-radius:var(--r-sm);
+  color:var(--text-2);
+  font-size:.875rem;font-weight:600;
+  padding:9px 16px;
+  transition:all .18s;
+}
+.dl-btn:hover{
+  border-color:var(--brand);
+  color:var(--brand);
+  background:var(--brand-ghost);
+}
+.dl-btn.best-quality{
+  background:linear-gradient(135deg, var(--brand), var(--brand-dk));
+  border-color:var(--brand);
+  color:white;
+}
+.dl-btn.best-quality:hover{
+  transform:translateY(-1px);
+  box-shadow:0 4px 12px var(--brand-ring);
+}
+.fmt-badge{
+  font-size:.65rem;font-weight:700;
+  background:var(--surface-2);
+  border-radius:4px;padding:2px 6px;
+}
+.dl-btn.best-quality .fmt-badge{
+  background:rgba(255,255,255,0.2);
+  color:white;
+}
+
+/* Features Grid */
+.features{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(170px,1fr));
+  gap:14px;
+  margin-top:28px;
+}
+.feat{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:var(--r);
+  padding:20px;
+  text-align:center;
+}
+.feat-icon{
+  width:38px;height:38px;
+  background:var(--brand-ghost);
+  border-radius:10px;
+  display:flex;align-items:center;justify-content:center;
+  margin:0 auto 13px;
+}
+.feat h3{font-size:.9rem;font-weight:700;margin-bottom:5px}
+.feat p{font-size:.77rem;color:var(--text-3)}
+
+/* Footer */
+footer{
+  background:var(--surface);
+  border-top:1px solid var(--border);
+  margin-top:auto;
+  padding:36px 24px 28px;
+}
+.disclaimer-box{
+  background:var(--warn-bg);
+  border:1px solid var(--warn-bd);
+  border-radius:var(--r-sm);
+  padding:12px 16px;
+  font-size:.78rem;
+  color:var(--warn);
+  margin-bottom:28px;
+}
+.footer-bottom{
+  border-top:1px solid var(--border);
+  padding-top:18px;
+  text-align:center;
+  font-size:.75rem;
+  color:var(--text-4);
+}
+
+@keyframes spin{to{transform:rotate(360deg)}}
+@media(max-width:620px){
+  .url-row{flex-direction:column}
+  .video-meta{flex-direction:column}
+  .thumb-frame{width:100%;height:190px}
+  .dl-btn{flex:1 1 calc(50% - 4px);justify-content:center}
+}
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <a href="/" class="logo">
+      <div class="logo-mark">
+        <span class="material-icons">play_arrow</span>
+      </div>
+      <span class="logo-name">Vid<span>Get</span></span>
+    </a>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="hero-eyebrow">
+    <span class="material-icons" style="font-size:12px">bolt</span>
+    Free · Instant · No Sign-up
+  </div>
+  <h1>Download <strong>Any Video</strong><br>in Maximum Quality</h1>
+  <p>Paste a link from YouTube, Instagram, or Facebook. Choose up to 8K quality or best available.</p>
+  <div class="platform-row">
+    <span class="p-chip"><span class="p-dot" style="background:#ff3333"></span>YouTube & Shorts</span>
+    <span class="p-chip"><span class="p-dot" style="background:#e1306c"></span>Instagram Reels</span>
+    <span class="p-chip"><span class="p-dot" style="background:#1877f2"></span>Facebook Videos</span>
+  </div>
+</section>
+
+<main>
+<div class="content-wrap">
+  <div class="card">
+    <div class="url-block">
+      <label class="field-label">Paste your video link</label>
+      <div class="url-row">
+        <input id="url-input" type="url" placeholder="https://youtube.com/watch?v=... or Instagram / Facebook URL"/>
+        <button id="fetch-btn">
+          <span class="btn-spin"></span>
+          <span class="btn-label">
+            <span class="material-icons" style="font-size:14px">search</span>
+            Fetch Video
+          </span>
+        </button>
+      </div>
+    </div>
+
+    <div id="error-alert" class="alert alert-error hidden">
+      <span class="material-icons">error</span>
+      <span id="error-text"></span>
+    </div>
+    <div id="success-alert" class="alert alert-success hidden">
+      <span class="material-icons">check_circle</span>
+      <span id="success-text"></span>
+    </div>
+    <div id="ffmpeg-notice" class="alert alert-warn hidden">
+      <span class="material-icons">warning</span>
+      <span>FFmpeg not detected. MP3 downloads disabled. Video quality may be limited.</span>
+    </div>
+
+    <div id="progress-box" class="hidden">
+      <div class="prog-track"><div id="prog-fill"></div></div>
+      <p id="prog-text" style="margin-top:8px;font-size:.78rem;color:var(--text-3)"></p>
+    </div>
+
+    <div id="result-panel" class="hidden">
+      <div class="video-meta">
+        <div class="thumb-frame"><img id="vid-thumb" src="" alt="Thumbnail"/></div>
+        <div class="video-info">
+          <div class="quality-badge" id="platform-badge">YouTube</div>
+          <div class="video-title" id="vid-title">—</div>
+          <div class="meta-row">
+            <span class="meta-tag"><span class="material-icons">schedule</span> <span id="vid-dur">—</span></span>
+            <span class="meta-tag"><span class="material-icons">person</span> <span id="vid-uploader">—</span></span>
+            <span class="meta-tag"><span class="material-icons">visibility</span> <span id="vid-views">—</span></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Best Quality Button -->
+      <div class="dl-group">
+        <div class="dl-head">
+          <span class="material-icons">stars</span>
+          Best Quality
+        </div>
+        <button id="best-quality-btn" class="dl-btn best-quality">
+          <span class="material-icons">download</span>
+          <span>Download Best Available Quality</span>
+          <span class="fmt-badge" id="best-quality-label">Maximum Resolution</span>
+        </button>
+      </div>
+
+      <!-- Video Quality Section -->
+      <div class="dl-group">
+        <div class="dl-head">
+          <span class="material-icons">videocam</span>
+          Video Quality
+        </div>
+        <div class="btn-grid" id="video-btn-grid"></div>
+      </div>
+
+      <!-- Audio Quality Section -->
+      <div class="dl-group" id="audio-group">
+        <div class="dl-head">
+          <span class="material-icons">audiotrack</span>
+          Audio Quality (MP3)
+        </div>
+        <div class="btn-grid" id="audio-btn-grid"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="features">
+    <div class="feat">
+      <div class="feat-icon"><span class="material-icons">4k</span></div>
+      <h3>Up to 8K Quality</h3>
+      <p>Download videos in 144p to 4320p (8K Ultra HD).</p>
+    </div>
+    <div class="feat">
+      <div class="feat-icon"><span class="material-icons">auto_awesome</span></div>
+      <h3>Best Quality Mode</h3>
+      <p>One-click download of the highest available resolution.</p>
+    </div>
+    <div class="feat">
+      <div class="feat-icon"><span class="material-icons">graphic_eq</span></div>
+      <h3>High Bitrate Audio</h3>
+      <p>MP3 up to 384 kbps for audiophile quality.</p>
+    </div>
+    <div class="feat">
+      <div class="feat-icon"><span class="material-icons">security</span></div>
+      <h3>Private by Design</h3>
+      <p>Files deleted immediately after download.</p>
+    </div>
+  </div>
+</div>
+</main>
+
+<footer>
+  <div class="footer-wrap">
+    <div class="disclaimer-box">
+      <strong>Disclaimer:</strong> This tool is for educational and personal use only.
+      Only download content you have permission to download. Respect copyright laws.
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; <span id="yr"></span> VidGet — Free Video Downloader</p>
+      <p>YouTube · YouTube Shorts · Instagram · Facebook</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function(){
+const urlInput = document.getElementById('url-input');
+const fetchBtn = document.getElementById('fetch-btn');
+const errorAlert = document.getElementById('error-alert');
+const errorText = document.getElementById('error-text');
+const successAlert = document.getElementById('success-alert');
+const successText = document.getElementById('success-text');
+const progressBox = document.getElementById('progress-box');
+const progFill = document.getElementById('prog-fill');
+const progText = document.getElementById('prog-text');
+const ffmpegNotice = document.getElementById('ffmpeg-notice');
+const resultPanel = document.getElementById('result-panel');
+const vidThumb = document.getElementById('vid-thumb');
+const vidTitle = document.getElementById('vid-title');
+const vidDur = document.getElementById('vid-dur');
+const vidUploader = document.getElementById('vid-uploader');
+const vidViews = document.getElementById('vid-views');
+const platformBadge = document.getElementById('platform-badge');
+const videoBtnGrid = document.getElementById('video-btn-grid');
+const audioBtnGrid = document.getElementById('audio-btn-grid');
+const audioGroup = document.getElementById('audio-group');
+const bestQualityBtn = document.getElementById('best-quality-btn');
+const bestQualityLabel = document.getElementById('best-quality-label');
+const yrEl = document.getElementById('yr');
+
+let currentUrl = '';
+let hasFfmpeg = true;
+let isDownloading = false;
+let currentQualities = [];
+let highestQuality = '';
+
+if(yrEl) yrEl.textContent = new Date().getFullYear();
+
+function showError(msg){
+  errorText.textContent = msg;
+  errorAlert.classList.remove('hidden');
+  successAlert.classList.add('hidden');
+  setTimeout(() => errorAlert.classList.add('hidden'), 5000);
+}
+
+function showSuccess(msg){
+  successText.textContent = msg;
+  successAlert.classList.remove('hidden');
+  errorAlert.classList.add('hidden');
+  setTimeout(() => successAlert.classList.add('hidden'), 5000);
+}
+
+function setFetching(loading){
+  fetchBtn.disabled = loading;
+  fetchBtn.classList.toggle('loading', loading);
+}
+
+function showProgress(percent, text){
+  progressBox.classList.remove('hidden');
+  progFill.style.width = percent + '%';
+  progText.textContent = text;
+}
+
+function hideProgress(){ progressBox.classList.add('hidden'); }
+
+async function fetchInfo(){
+  const url = urlInput.value.trim();
+  if(!url){ showError('Please paste a video URL.'); return; }
+
+  currentUrl = url;
+  resultPanel.classList.add('hidden');
+  setFetching(true);
+
+  const fd = new FormData();
+  fd.append('url', url);
+
+  try{
+    const res = await fetch('/fetch', { method:'POST', body: fd });
+    const data = await res.json();
+
+    if(!res.ok || data.error){
+      showError(data.error || 'Could not fetch video info.');
+      return;
+    }
+
+    vidThumb.src = data.thumbnail || '';
+    vidTitle.textContent = data.title || 'Unknown Title';
+    vidDur.textContent = data.duration || '—';
+    vidUploader.textContent = data.uploader || 'Unknown';
+    vidViews.textContent = data.view_count ? data.view_count.toLocaleString() : '—';
+    platformBadge.innerHTML = `<span class="material-icons">language</span> ${data.platform || 'YouTube'}`;
+    hasFfmpeg = data.ffmpeg_available !== false;
+    highestQuality = data.highest_quality || '1080p';
+    currentQualities = data.available_qualities || ['360p', '480p', '720p', '1080p'];
+    
+    bestQualityLabel.textContent = data.highest_quality_display || 'Maximum Resolution';
+    
+    if(!hasFfmpeg) ffmpegNotice.classList.remove('hidden');
+    else ffmpegNotice.classList.add('hidden');
+
+    buildButtons(currentQualities, data.available_audio || ['MP3 128', 'MP3 192', 'MP3 256', 'MP3 320']);
+    
+    resultPanel.classList.remove('hidden');
+    resultPanel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
+  } catch(err){
+    showError('Network error. Please check your connection.');
+  } finally {
+    setFetching(false);
+  }
+}
+
+function buildButtons(videoQualities, audioQualities){
+  videoBtnGrid.innerHTML = '';
+  audioBtnGrid.innerHTML = '';
+
+  // Sort qualities by resolution (highest first)
+  const qualityOrder = ['4320p', '2160p', '1440p', '1080p', '720p', '480p', '360p', '240p', '144p'];
+  videoQualities.sort((a,b) => qualityOrder.indexOf(a) - qualityOrder.indexOf(b));
+
+  videoQualities.forEach(q => {
+    const btn = document.createElement('button');
+    btn.className = 'dl-btn';
+    btn.innerHTML = `<span class="material-icons">play_circle</span><span>${q}</span><span class="fmt-badge">MP4</span>`;
+    btn.addEventListener('click', () => startDownload(btn, 'video', q));
+    videoBtnGrid.appendChild(btn);
+  });
+
+  if(!hasFfmpeg){
+    audioGroup.style.opacity = '0.5';
+    audioGroup.title = 'FFmpeg required for MP3 conversion';
+  } else {
+    audioGroup.style.opacity = '1';
+  }
+
+  const audioOrder = ['MP3 384', 'MP3 320', 'MP3 256', 'MP3 192', 'MP3 128', 'MP3 64'];
+  audioQualities.sort((a,b) => audioOrder.indexOf(a) - audioOrder.indexOf(b));
+
+  audioQualities.forEach(q => {
+    const btn = document.createElement('button');
+    btn.className = 'dl-btn';
+    btn.innerHTML = `<span class="material-icons">audiotrack</span><span>${q}</span><span class="fmt-badge">MP3</span>`;
+    btn.addEventListener('click', () => startDownload(btn, 'audio', q));
+    if(!hasFfmpeg) btn.disabled = true;
+    audioBtnGrid.appendChild(btn);
+  });
+}
+
+async function startDownload(btn, type, quality){
+  if(isDownloading) return;
+  if(!currentUrl){ showError('Please fetch video info first.'); return; }
+
+  isDownloading = true;
+  btn.classList.add('busy');
+
+  const isAudio = type === 'audio';
+  showProgress(0, `Starting ${isAudio ? 'audio' : 'video'} download...`);
+
+  let progress = 0;
+  const interval = setInterval(() => {
+    if(progress < 90){
+      progress += Math.random() * 10;
+      progress = Math.min(progress, 90);
+      progFill.style.width = progress + '%';
+      progText.textContent = `Downloading ${quality}...`;
+    }
+  }, 500);
+
+  try{
+    const fd = new FormData();
+    fd.append('url', currentUrl);
+    fd.append('quality', quality);
+    if(isAudio) fd.append('mp3', '1');
+
+    const res = await fetch('/download', { method:'POST', body: fd });
+    clearInterval(interval);
+
+    if(!res.ok){
+      const err = await res.json();
+      throw new Error(err.error || 'Download failed');
+    }
+
+    progFill.style.width = '95%';
+    progText.textContent = 'Processing file...';
+
+    const blob = await res.blob();
+    const cd = res.headers.get('Content-Disposition') || '';
+    const match = cd.match(/filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/);
+    const name = match ? match[1].replace(/['"]/g,'') : `${type}_${quality}.${isAudio ? 'mp3' : 'mp4'}`;
+
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = name;
+    document.body.appendChild(a); a.click(); a.remove();
+    URL.revokeObjectURL(url);
+
+    progFill.style.width = '100%';
+    progText.textContent = 'Download complete!';
+    showSuccess(`${name} downloaded successfully!`);
+    setTimeout(hideProgress, 3000);
+
+  } catch(err){
+    clearInterval(interval);
+    showError(err.message);
+    hideProgress();
+  } finally {
+    isDownloading = false;
+    btn.classList.remove('busy');
+  }
+}
+
+async function downloadBestQuality(){
+  if(isDownloading) return;
+  if(!currentUrl){ showError('Please fetch video info first.'); return; }
+
+  isDownloading = true;
+  bestQualityBtn.classList.add('busy');
+  
+  showProgress(0, 'Fetching best available quality...');
+  
+  let progress = 0;
+  const interval = setInterval(() => {
+    if(progress < 90){
+      progress += Math.random() * 10;
+      progress = Math.min(progress, 90);
+      progFill.style.width = progress + '%';
+      progText.textContent = 'Downloading best quality video...';
+    }
+  }, 500);
+
+  try{
+    const fd = new FormData();
+    fd.append('url', currentUrl);
+    fd.append('best', '1');
+
+    const res = await fetch('/download', { method:'POST', body: fd });
+    clearInterval(interval);
+
+    if(!res.ok){
+      const err = await res.json();
+      throw new Error(err.error || 'Download failed');
+    }
+
+    progFill.style.width = '95%';
+    progText.textContent = 'Processing file...';
+
+    const blob = await res.blob();
+    const cd = res.headers.get('Content-Disposition') || '';
+    const match = cd.match(/filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/);
+    const name = match ? match[1].replace(/['"]/g,'') : `video_best_quality.mp4`;
+
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = name;
+    document.body.appendChild(a); a.click(); a.remove();
+    URL.revokeObjectURL(url);
+
+    progFill.style.width = '100%';
+    progText.textContent = 'Download complete!';
+    showSuccess(`${name} downloaded successfully!`);
+    setTimeout(hideProgress, 3000);
+
+  } catch(err){
+    clearInterval(interval);
+    showError(err.message);
+    hideProgress();
+  } finally {
+    isDownloading = false;
+    bestQualityBtn.classList.remove('busy');
+  }
+}
+
+fetchBtn.addEventListener('click', fetchInfo);
+bestQualityBtn.addEventListener('click', downloadBestQuality);
+urlInput.addEventListener('keypress', e => { if(e.key === 'Enter') fetchInfo(); });
+urlInput.addEventListener('input', () => {
+  if(!urlInput.value.trim()){
+    resultPanel.classList.add('hidden');
+  }
+});
+
+})();
+</script>
+</body>
+</html>

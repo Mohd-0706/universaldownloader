@@ -1,0 +1,5 @@
+flask>=3.0.0
+yt-dlp>=2024.1.1
+downloader
+ffmpeg-python
+flask_limiter
